@@ -1,0 +1,2 @@
+C:\Users\phili\Documents\GitHub\SFML_pong\x64\Debug\SFML_pong.exe
+C:\Users\phili\Documents\GitHub\SFML_pong\Pong-Game\x64\Debug\SFML_pong.exe
