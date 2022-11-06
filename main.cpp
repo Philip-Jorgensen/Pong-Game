@@ -3,16 +3,20 @@
 */
 #include <SFML/Graphics.hpp>
 #include <iostream>
+#include <random>
 
 #define WINDOW_WIDTH 1280
 #define WINDOW_HEIGHT 640
 
+std::random_device rd;     // Only used once to initialise (seed) engine
+std::mt19937 rng(rd());    // Random-number engine used (Mersenne-Twister in this case)
 
 class player
 {
 public:
 	// Public member variables
 	float y_pos;
+	sf::RectangleShape paddle;
 
 private:
 	// Private member variables
@@ -20,9 +24,6 @@ private:
 
 	int paddle_height = 90;
 	int paddle_width = 14;
-
-	sf::RectangleShape paddle;
-
 
 public:
 	player(float x_position = 50, float y_position = 50)
@@ -60,7 +61,7 @@ public:
 	
 };
 
-class ball
+class pong_ball
 {
 public:
 	// Public member variables
@@ -73,12 +74,12 @@ private:
 	bool running = false;
 
 	float x_vel = 15;
-	float y_vel = 5;
+	float y_vel = 10;
 
 	sf::CircleShape ball_shape;
 
 public:
-	ball(float x_position = WINDOW_WIDTH/2, float y_position = WINDOW_HEIGHT/2)
+	pong_ball(float x_position = WINDOW_WIDTH/2, float y_position = WINDOW_HEIGHT/2)
 	{
 		x_pos = x_position;
 		y_pos = y_position;
@@ -86,15 +87,15 @@ public:
 		ball_shape.setRadius(radius);
 	}
 
-	void startToggle(sf::Keyboard::Key start_key)
+	void startToggle()
 	{
-		if (sf::Keyboard::isKeyPressed(start_key))
-			running = !running;
+		running = !running;
 	}
 
 	void reset(void)
 	{
 		running = false;
+
 		x_pos = WINDOW_WIDTH / 2;
 		y_pos = WINDOW_HEIGHT / 2;
 	}
@@ -103,22 +104,17 @@ public:
 	{
 		if (running)
 		{
+			sf::FloatRect player1_bounds = player1.paddle.getGlobalBounds();
+			sf::FloatRect player2_bounds = player2.paddle.getGlobalBounds();
+
 			// Interaction between the walls
 			if (x_pos >= WINDOW_WIDTH - radius || x_pos <= 0 + radius) reset(); // Left and right walls
 			if (y_pos >= WINDOW_HEIGHT - radius || y_pos <= 0 + radius) y_vel *= -1; // Top and bottom walls
 
 			// Interaction between the paddles
-			if (x_pos >= player2.get_x_pos() - radius && 
-				y_pos <= player2.y_pos + player2.get_paddle_height() && 
-				y_pos >= player2.y_pos) 
-					x_vel *= -1; 
+			if (player1_bounds.contains(x_pos, y_pos)) x_vel *= -1;
+			if (player2_bounds.contains(x_pos + radius, y_pos)) x_vel *= -1;
 
-			if (x_pos <= player1.get_x_pos() + radius && 
-				y_pos <= player1.y_pos + player1.get_paddle_height() && 
-				y_pos >= player1.y_pos) 
-					x_vel *= -1; 
-
-			// Movement
 			x_pos += x_vel;
 			y_pos += y_vel;
 		}
@@ -150,7 +146,7 @@ int main(void)
 	player player1(50, 50);
 	player player2(WINDOW_WIDTH - 50, 50);
 
-	ball ball1;
+	pong_ball ball;
 
 
 	// Game loop
@@ -165,13 +161,17 @@ int main(void)
 
 			// Close window, escape
 			if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape)) window.close();
+
+			if ((event.type == sf::Event::KeyPressed) && (event.key.code == sf::Keyboard::Space))
+			{
+				ball.startToggle();
+			}
 		}
-		ball1.startToggle(sf::Keyboard::Space);
 
 		player2.move(sf::Keyboard::Up, sf::Keyboard::Down);
 		player1.move(sf::Keyboard::W, sf::Keyboard::S);
 
-		ball1.move(player1, player2);
+		ball.move(player1, player2);
 
 		// Clear screen
 		window.clear();
@@ -181,7 +181,7 @@ int main(void)
 
 		player1.draw(window);
 		player2.draw(window);
-		ball1.draw(window);
+		ball.draw(window);
 
 		// Update the window
 		window.display();

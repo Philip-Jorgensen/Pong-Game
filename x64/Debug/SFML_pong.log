@@ -1,13 +1,13 @@
 ﻿  main.cpp
-C:\Users\phili\Documents\GitHub\SFML_pong\Pong-Game\main.cpp(33,45): warning C4244: 'argument': conversion from 'int' to 'T', possible loss of data
+C:\Users\phili\Documents\GitHub\SFML_pong\Pong-Game\main.cpp(34,45): warning C4244: 'argument': conversion from 'int' to 'T', possible loss of data
           with
           [
               T=float
           ]
-C:\Users\phili\Documents\GitHub\SFML_pong\Pong-Game\main.cpp(33,31): warning C4244: 'argument': conversion from 'int' to 'T', possible loss of data
+C:\Users\phili\Documents\GitHub\SFML_pong\Pong-Game\main.cpp(34,31): warning C4244: 'argument': conversion from 'int' to 'T', possible loss of data
           with
           [
               T=float
           ]
-C:\Users\phili\Documents\GitHub\SFML_pong\Pong-Game\main.cpp(47,69): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+C:\Users\phili\Documents\GitHub\SFML_pong\Pong-Game\main.cpp(48,69): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
   SFML_pong.vcxproj -> C:\Users\phili\Documents\GitHub\SFML_pong\Pong-Game\x64\Debug\SFML_pong.exe
