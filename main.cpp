@@ -8,8 +8,6 @@
 #define WINDOW_WIDTH 1280
 #define WINDOW_HEIGHT 640
 
-std::random_device rd;     // Only used once to initialise (seed) engine
-std::mt19937 rng(rd());    // Random-number engine used (Mersenne-Twister in this case)
 
 class player
 {
@@ -17,6 +15,7 @@ public:
 	// Public member variables
 	float y_pos;
 	sf::RectangleShape paddle;
+	int points = 0;
 
 private:
 	// Private member variables
@@ -74,7 +73,7 @@ private:
 	bool running = false;
 
 	float x_vel = 15;
-	float y_vel = 10;
+	float y_vel = 6;
 
 	sf::CircleShape ball_shape;
 
@@ -106,6 +105,18 @@ public:
 		{
 			sf::FloatRect player1_bounds = player1.paddle.getGlobalBounds();
 			sf::FloatRect player2_bounds = player2.paddle.getGlobalBounds();
+
+			// Points system
+			if (x_pos >= WINDOW_WIDTH - radius)
+			{
+				player1.points++;
+				std::cout << "P1: " << player1.points << "\tP2: " << player2.points << std::endl;
+			}
+			if (x_pos <= 0 + radius)
+			{
+				player2.points++;
+				std::cout << "P1: " << player1.points << "\tP2: " << player2.points << std::endl;
+			}
 
 			// Interaction between the walls
 			if (x_pos >= WINDOW_WIDTH - radius || x_pos <= 0 + radius) reset(); // Left and right walls
